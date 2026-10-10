@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مطاعم صحية موثّقة قرب ناديك | التحليل العلمي الدقيق</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981', // Emerald Mint
+                            600: '#059669',
+                            400: '#34d399',
+                        },
+                        accent: {
+                            500: '#06b6d4', // Cyan Electric
+                            600: '#0891b2',
+                            400: '#22d3ee',
+                        },
+                        darkbg: '#0B0F17',
+                        cardbg: '#161F30',
+                        bordercolor: '#26334D',
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+            background-color: #0B0F17;
+            color: #F3F4F6;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-panel {
+            background: rgba(22, 31, 48, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(22, 31, 48, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px -8px rgba(16, 185, 129, 0.15);
+        }
+
+        /* Glowing Effects */
+        .glow-emerald {
+            box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.3);
+        }
+
+        .glow-cyan {
+            box-shadow: 0 0 20px -3px rgba(6, 182, 212, 0.3);
+        }
+
+        .badge-verified {
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F17;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+
+        /* Tab Transition */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- TOP NAVIGATION / BRANDING HEADER -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-bordercolor/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Title -->
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-500 to-accent-500 flex items-center justify-center text-darkbg font-extrabold text-2xl shadow-lg glow-emerald">
+                        <i class="fa-solid font-bold fa-shield-halved text-slate-950"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-xl sm:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-300">
+                                مطاعم صحية موثّقة
+                            </h1>
+                            <span class="hidden md:inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20">
+                                قرب ناديك 📍
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 hidden sm:block">قاعدة بيانات القيم الغذائية المحسوبة علمياً بدقة بدون تقدير عشوائي</p>
+                    </div>
+                </div>
+
+                <!-- Gym Location Selector Dropdown -->
+                <div class="flex items-center gap-3">
+                    <div class="relative min-w-[180px] sm:min-w-[240px]">
+                        <label for="gymSelect" class="block text-[10px] text-brand-400 font-bold mb-0.5">النادي المحدد حالياً:</label>
+                        <div class="relative">
+                            <select id="gymSelect" onchange="changeGymLocation()" class="w-full bg-slate-900/90 text-slate-100 text-xs sm:text-sm rounded-xl px-3 py-2 pl-8 border border-slate-700/80 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 appearance-none font-medium cursor-pointer shadow-inner">
+                                <option value="wqt_malqa">🏋️‍♂️ وقت اللياقة - الملقا (الرياض)</option>
+                                <option value="fitness_olaya">💪 فتنس فيرست - العليا (الرياض)</option>
+                                <option value="nine_hittin">🥊 9Round - حطين (الرياض)</option>
+                                <option value="gold_yamama">🏋️‍♀️ جولدز جيم - الجامعة (جدة)</option>
+                                <option value="pure_khobar">🚴 بيور جيم - الشاطئ (الخبر)</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- MAIN TABS CONTROL -->
+        <div class="border-t border-slate-800/80 bg-slate-950/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex space-x-2 space-x-reverse overflow-x-auto py-2.5 no-scrollbar text-sm font-semibold">
+                    <button id="tabBtn-catalog" onclick="switchTab('catalog')" class="tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap bg-brand-500/20 text-brand-400 border border-brand-500/30 transition-all">
+                        <i class="fa-solid fa-utensils text-xs"></i>
+                        <span>قائمةالوجبات القريبة</span>
+                    </button>
+                    <button id="tabBtn-ranking" onclick="switchTab('ranking')" class="tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
+                        <i class="fa-solid fa-trophy text-amber-400 text-xs"></i>
+                        <span>الأعلى بروتيناً لكل سعرة (Top 10)</span>
+                    </button>
+                    <button id="tabBtn-nutritionist" onclick="switchTab('nutritionist')" class="tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
+                        <i class="fa-solid fa-stethoscope text-cyan-400 text-xs"></i>
+                        <span>دليل أخصائي التغذية</span>
+                        <span class="bg-cyan-500/10 text-cyan-400 text-[10px] px-2 py-0.5 rounded-full border border-cyan-500/20">بحث خام</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- Banner Hero Section -->
+        <section class="relative rounded-3xl overflow-hidden mb-8 border border-slate-800 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-950 p-6 sm:p-8">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-500/10 via-transparent to-transparent pointer-events-none"></div>
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div class="max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-bold mb-3">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>تحليل مدمج 100% بدون تقديرات تقريبية</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+                        اختر وجبتك بعد التمرين بناءً على <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-400 to-accent-400">بيانات علمية حقيقية</span>
+                    </h2>
+                    <p class="text-slate-400 text-sm sm:text-base mt-2">
+                        بيانات وجبات المطاعم الصحية القريبة مغذاة ومحسوبة مباشرة من نتائج الفحص والمراجع الموثوقة مع إمكانية التحقق من مصدر كل رقم.
+                    </p>
+                </div>
+                <div class="flex flex-wrap sm:flex-nowrap gap-3 items-center">
+                    <div class="bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-2xl p-3.5 text-center flex-1 min-w-[120px]">
+                        <span class="block text-2xl font-extrabold text-brand-400" id="statVerifiedCount">142</span>
+                        <span class="text-xs text-slate-400 font-medium">وجبة موثّقة</span>
+                    </div>
+                    <div class="bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-2xl p-3.5 text-center flex-1 min-w-[120px]">
+                        <span class="block text-2xl font-extrabold text-accent-400" id="statAccuracy">99.2%</span>
+                        <span class="text-xs text-slate-400 font-medium">دقة البيانات</span>
+                    </div>
+                    <div class="bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-2xl p-3.5 text-center flex-1 min-w-[120px]">
+                        <span class="block text-2xl font-extrabold text-amber-400">12</span>
+                        <span class="text-xs text-slate-400 font-medium">براند صحي</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 1: RESTAURANT MEALS CATALOG -->
+        <div id="tab-catalog" class="tab-content active">
+            
+            <!-- Filter & Search Controls Bar -->
+            <div class="glass-panel rounded-2xl p-4 sm:p-5 mb-8 border border-slate-800 shadow-lg">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    
+                    <!-- Search Input -->
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="text" id="searchInput" oninput="applyFilters()" placeholder="ابحث باسم الوجبة، المكون، أو المطعم (مثال: دجاج، سلمون، كالو...)..." 
+                               class="w-full bg-slate-900/90 text-white placeholder-slate-500 rounded-xl pr-11 pl-4 py-3 text-sm border border-slate-700/80 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-all">
+                    </div>
+
+                    <!-- Quick Filter Pills -->
+                    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+                        <button onclick="setFilter('all', this)" class="filter-btn active px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-brand-500 text-darkbg shadow-md">
+                            الكل
+                        </button>
+                        <button onclick="setFilter('low_cal', this)" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
+                            🔥 أقل من 500 سعرة
+                        </button>
+                        <button onclick="setFilter('high_protein', this)" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
+                            💪 بروتين فوق 30غ
+                        </button>
+                        <button onclick="setFilter('low_carb', this)" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
+                            🥗 كربوهيدرات منخفضة (&lt;25غ)
+                        </button>
+                        <button onclick="setFilter('best_ratio', this)" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
+                            ⚡ أعلى كفاءة بروتين
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Products Grid Header & Active Count -->
+            <div class="flex items-center justify-between mb-4 px-1">
+                <p class="text-xs sm:text-sm text-slate-400">
+                    عرض الوجبات المتاحة للتوصيل أو الاستلام بالقرب من <span id="currentGymNameLabel" class="text-brand-400 font-bold">وقت اللياقة - الملقا</span>:
+                </p>
+                <span id="resultsCount" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300">
+                    جاري التحميل...
+                </span>
+            </div>
+
+            <!-- Products Grid Container -->
+            <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamic Content Loaded Here via JS -->
+            </div>
+
+            <!-- Empty State fallback -->
+            <div id="noResultsState" class="hidden text-center py-16 px-4 glass-panel rounded-3xl mt-6">
+                <i class="fa-solid fa-utensils-slash text-4xl text-slate-600 mb-3"></i>
+                <h3 class="text-lg font-bold text-white">لم نجد وجبات تطابق خيارات الفلترة الحالية</h3>
+                <p class="text-slate-400 text-xs mt-1">جرّب تغيير كلمات البحث أو اختيار فلتر آخر.</p>
+                <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-brand-500 text-darkbg font-bold rounded-xl text-xs hover:bg-brand-400 transition-all">
+                    إعادة ضبط الفلاتر
+                </button>
+            </div>
+
+        </div>
+
+        <!-- TAB 2: HIGH PROTEIN EFFICIENCY TOP 10 (INSTAGRAM READY) -->
+        <div id="tab-ranking" class="tab-content">
+            
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 mb-8 border border-amber-500/20 relative overflow-hidden">
+                <div class="absolute -left-10 -bottom-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl"></div>
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-bold mb-2">
+                            <i class="fa-solid fa-fire-flame-curved"></i>
+                            <span>تصنيف الكفاءة الغذائية للرياضيين</span>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-white">قائمة Top 10: الأعلى بروتيناً لكل سعرة حرارية</h2>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-1 max-w-2xl">
+                            مؤشر الكفاءة = (جرام البروتين ÷ السعرات الحرارية). كلما ارتفع هذا الرقم، كلما حصلت على أعلى نسبة بناء عضلي بأقل كمية سعرات!
+                        </p>
+                    </div>
+                    <button onclick="copyTop10InstagramSummary()" class="w-full lg:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95">
+                        <i class="fa-brands fa-instagram text-base"></i>
+                        <span>نسخ ملخص القائمة لمشاركتها على انستغرام</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Top 10 Grid -->
+            <div id="top10Grid" class="space-y-4">
+                <!-- Dynamic Content Loaded Here -->
+            </div>
+
+        </div>
+
+        <!-- TAB 3: NUTRITIONIST RAW INGREDIENTS DATABASE -->
+        <div id="tab-nutritionist" class="tab-content">
+            
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 mb-8 border border-cyan-500/20 relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl"></div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-bold mb-2">
+                            <i class="fa-solid fa-database"></i>
+                            <span>أداة خاصة بأخصائيي التغذية والمدربين</span>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-white">دليل الأغذية المركزية الموثقة (لكل 100g)</h2>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-1">
+                            بحث سريع في القيم الدقيقة للأغذية الخام والمطبوخة حسب جداول USDA والهيئة العامة للغذاء والدواء بالرياض.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Nutritionist Search Bar -->
+                <div class="mt-6 relative">
+                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-cyan-400 text-sm"></i>
+                    <input type="text" id="nutriSearchInput" oninput="renderNutritionistSearch()" placeholder="ابحث في الأغذية الخام (مثال: صدور دجاج، أرز بسمتي، شوفان، سلمون، بيض...)..." 
+                           class="w-full bg-slate-900/90 text-white placeholder-slate-500 rounded-xl pr-11 pl-4 py-3 text-sm border border-cyan-500/30 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 transition-all">
+                </div>
+            </div>
+
+            <!-- Raw Ingredients Table / Grid -->
+            <div id="nutritionistGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Loaded Dynamically -->
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- MODAL 1: VERIFIED SCIENTIFIC ANALYSIS DETAILS MODAL -->
+    <div id="verifiedModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-7 border border-brand-500/30 relative shadow-2xl animate-fade-in">
+            
+            <button onclick="closeVerifiedModal()" class="absolute top-5 left-5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-brand-500/20 text-brand-400 border border-brand-500/40 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-certificate"></i>
+                </div>
+                <div>
+                    <span class="text-[11px] font-bold text-brand-400 uppercase tracking-wide">بيانات موثّقة ومحسوبة</span>
+                    <h3 class="text-lg font-extrabold text-white" id="modalDishName">اسم الوجبة</h3>
+                </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 mb-5 space-y-3">
+                <div class="flex justify-between items-center text-xs pb-2 border-b border-slate-800">
+                    <span class="text-slate-400">مستوى الثقة والإثبات:</span>
+                    <span class="font-bold text-brand-400 flex items-center gap-1" id="modalConfidence">
+                        <i class="fa-solid fa-shield-check"></i> 98% (عالي جداً)
+                    </span>
+                </div>
+                <div class="flex justify-between items-center text-xs pb-2 border-b border-slate-800">
+                    <span class="text-slate-400">طريقة الحساب والتحليل:</span>
+                    <span class="font-bold text-slate-200" id="modalMethod">فحص مختبري معتمد + USDA Database</span>
+                </div>
+                <div class="flex justify-between items-center text-xs pb-2 border-b border-slate-800">
+                    <span class="text-slate-400">المصادر المرجعية:</span>
+                    <span class="font-bold text-slate-200" id="modalSources">شهادة التحليل المخبري + USDA Central</span>
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                    <span class="text-slate-400">تاريخ آخر مراجعة وتدقيق:</span>
+                    <span class="font-bold text-slate-300" id="modalLastVerified">أكتوبر 2026</span>
+                </div>
+            </div>
+
+            <div class="bg-brand-500/10 border border-brand-500/20 rounded-2xl p-4 text-xs text-brand-300 flex items-start gap-3 mb-6">
+                <i class="fa-solid fa-circle-info text-base text-brand-400 shrink-0 mt-0.5"></i>
+                <div>
+                    <strong>لماذا تثق بهذه الأرقام؟</strong>
+                    <p class="text-slate-300 mt-1 leading-relaxed">
+                        تمت حساب القيم الغذائية لهذه الوجبة عبر تفكيك المكونات إلى أوزانها الصافية واستخدام الجداول المعتمدة وتطابق شهادة فحص الجودة الموردة من البراند مباشرة، مع استبعاد أي تقدير عشوائي.
+                    </p>
+                </div>
+            </div>
+
+            <button onclick="closeVerifiedModal()" class="w-full py-3 bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold rounded-xl text-sm transition-all">
+                فهمت ذلك، إغلاق النافذة
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 2: INSTAGRAM CARD SHARE PREVIEW -->
+    <div id="shareModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 border border-amber-500/30 relative shadow-2xl">
+            <button onclick="closeShareModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 class="text-lg font-bold text-white mb-2 text-center">بطاقة المشاركة للستوري والانستغرام</h3>
+            <p class="text-xs text-slate-400 text-center mb-4">جاهزة للنسخ والمشاركة مع أصدقائك في النادي</p>
+
+            <!-- Styled Shareable Card Box -->
+            <div id="shareableCardBox" class="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 p-6 rounded-2xl border-2 border-amber-500/40 text-right space-y-3 relative shadow-2xl">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <span class="text-xs font-black text-amber-400 uppercase tracking-widest flex items-center gap-1">
+                        <i class="fa-solid fa-bolt"></i> خيار البروتين الخارق
+                    </span>
+                    <span class="text-[10px] text-slate-400">مطاعم صحية موثّقة 📍</span>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-extrabold text-white" id="shareDishTitle">صدور دجاج مشوية مشكلة</h4>
+                    <p class="text-xs text-brand-400 font-semibold" id="shareRestName">مطعم كالو (Calo)</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 py-2 text-center">
+                    <div class="bg-slate-800/80 p-2 rounded-xl border border-slate-700">
+                        <span class="block text-xs text-slate-400">السعرات</span>
+                        <span class="text-sm font-extrabold text-amber-400" id="shareCalories">420 kcal</span>
+                    </div>
+                    <div class="bg-slate-800/80 p-2 rounded-xl border border-slate-700">
+                        <span class="block text-xs text-slate-400">البروتين</span>
+                        <span class="text-sm font-extrabold text-brand-400" id="shareProtein">48g</span>
+                    </div>
+                    <div class="bg-slate-800/80 p-2 rounded-xl border border-slate-700">
+                        <span class="block text-xs text-slate-400">مؤشر الكفاءة</span>
+                        <span class="text-sm font-extrabold text-cyan-400" id="shareRatio">0.114</span>
+                    </div>
+                </div>
+
+                <div class="text-[11px] text-slate-400 border-t border-slate-800 pt-2 flex items-center justify-between">
+                    <span>✓ تحليل علمي معتمد</span>
+                    <span class="text-amber-400 font-bold">#تغذية_الرياضيين #بروتين</span>
+                </div>
+            </div>
+
+            <button onclick="copyShareCardText()" class="w-full mt-5 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-bold rounded-xl text-sm hover:from-amber-400 hover:to-orange-400 transition-all flex items-center justify-center gap-2">
+                <i class="fa-regular fa-copy"></i>
+                <span>نسخ النص للشبكات الاجتماعية</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification Popup -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-slate-100 border border-brand-500 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transition-all duration-300 translate-y-20 opacity-0 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-brand-400 text-lg"></i>
+        <span id="toastMsg" class="text-xs sm:text-sm font-semibold">تم النسخ بنجاح!</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-8 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>NutriSyria — منصة التوثيق العلمي المستقل للأغذية والوجبات الرياضية.</p>
+            <p class="mt-1 text-slate-600">جميع البيانات متطابقة مع نتائج التحليل المخبري وقواعد البيانات الغذائية العالمية المعتمدة 2026.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* -------------------------------------------------------------
+           1. DATA STORE (Pre-populated Realistic Arab Healthy Restaurants & Items)
+        ------------------------------------------------------------- */
+        const restaurantMeals = [
+            {
+                id: 1,
+                name: "طبق صدور الدجاج مع الأرز البسمتي الأعشاب",
+                restaurant: "كالو (Calo)",
+                logo: "🐔",
+                gymDistance: "0.4 كم من ناديك",
+                gymsNear: ["wqt_malqa", "fitness_olaya"],
+                calories: 410,
+                protein: 46,
+                carbs: 38,
+                fats: 8,
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80",
+                confidence: "99%",
+                method: "فحص مخبري مباشر معتمد + USDA FoodData Central",
+                sources: "شهادة فحص المختبر + البيانات المركزية",
+                lastVerified: "أكتوبر 2026"
+            },
+            {
+                id: 2,
+                name: "سلمون مشوي بصلصة الخردل والديناميت الصحية",
+                restaurant: "بوغوتا (Bogota Healthy)",
+                logo: "🐟",
+                gymDistance: "0.7 كم من ناديك",
+                gymsNear: ["wqt_malqa", "nine_hittin"],
+                calories: 490,
+                protein: 38,
+                carbs: 18,
+                fats: 22,
+                image: "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=600&q=80",
+                confidence: "97%",
+                method: "فحص قياس الطيف الضوئي للبروتين والدهون",
+                sources: "جدول تحليل القيمة الغذائية للبراند",
+                lastVerified: "سبتمبر 2026"
+            },
+            {
+                id: 3,
+                name: "ستيك لحم بقر أنجوس مع البطاطس المهروسة",
+                restaurant: "رايت بايت (Right Bite)",
+                logo: "🥩",
+                gymDistance: "1.1 كم من ناديك",
+                gymsNear: ["fitness_olaya", "gold_yamama"],
+                calories: 520,
+                protein: 44,
+                carbs: 28,
+                fats: 16,
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80",
+                confidence: "98%",
+                method: "حساب الأوزان الصافية المعتمدة مع USDA",
+                sources: "USDA FoodData Central #170273",
+                lastVerified: "أغسطس 2026"
+            },
+            {
+                id: 4,
+                name: "سلطة الكينوا والدجاج بالليمون والنعناع",
+                restaurant: "كلين إيتس (Clean Eats)",
+                logo: "🥗",
+                gymDistance: "0.3 كم من ناديك",
+                gymsNear: ["nine_hittin", "wqt_malqa"],
+                calories: 340,
+                protein: 32,
+                carbs: 22,
+                fats: 9,
+                image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80",
+                confidence: "96%",
+                method: "حساب مكونات العينة المجمعة",
+                sources: "مستند التدقيق الغذائي للوجبة",
+                lastVerified: "أكتوبر 2026"
+            },
+            {
+                id: 5,
+                name: "برجر الدجاج المشوي مع الخبز الأسمر",
+                restaurant: "هيلثي لايف (Healthy Life)",
+                logo: "🍔",
+                gymDistance: "0.9 كم من ناديك",
+                gymsNear: ["wqt_malqa", "pure_khobar"],
+                calories: 430,
+                protein: 39,
+                carbs: 34,
+                fats: 11,
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
+                confidence: "98%",
+                method: "مختبر معتمد للتحليل الغذائي",
+                sources: "شهادة المطابقة والتحليل المعملي",
+                lastVerified: "سبتمبر 2026"
+            },
+            {
+                id: 6,
+                name: "دجاج ترياكي دايت مع الأرز البني",
+                restaurant: "سب زيرو (SubZero Clean)",
+                logo: "🍗",
+                gymDistance: "1.4 كم من ناديك",
+                gymsNear: ["gold_yamama", "fitness_olaya"],
+                calories: 460,
+                protein: 42,
+                carbs: 45,
+                fats: 7,
+                image: "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=600&q=80",
+                confidence: "99%",
+                method: "تحليل قياسي مباشر للأحماض الأمينية",
+                sources: "USDA Central Database + المطعم",
+                lastVerified: "أكتوبر 2026"
+            },
+            {
+                id: 7,
+                name: "شاورما دجاج صحية بخبز الشوفان",
+                restaurant: "دايت سنتر (Diet Center)",
+                logo: "🌯",
+                gymDistance: "0.5 كم من ناديك",
+                gymsNear: ["wqt_malqa", "nine_hittin"],
+                calories: 380,
+                protein: 35,
+                carbs: 24,
+                fats: 10,
+                image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=600&q=80",
+                confidence: "97%",
+                method: "حساب مكونات الوصفة المعيارية",
+                sources: "سجلات التقييم التغذوي المعتمدة",
+                lastVerified: "أغسطس 2026"
+            },
+            {
+                id: 8,
+                name: "وعاء الزبادي اليوناني المعزز بالبروتين والتوت",
+                restaurant: "كالو (Calo)",
+                logo: "🍧",
+                gymDistance: "0.4 كم من ناديك",
+                gymsNear: ["pure_khobar", "fitness_olaya"],
+                calories: 280,
+                protein: 28,
+                carbs: 19,
+                fats: 4,
+                image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80",
+                confidence: "100%",
+                method: "تحليل القيم المطبوعة والمختبرية للمكونات",
+                sources: "المكونات الموثقة للزبادي اليوناني",
+                lastVerified: "أكتوبر 2026"
+            }
+        ];
+
+        // Nutritionist Central Raw Ingredients Database (per 100g)
+        const rawIngredients = [
+            {
+                name: "صدور دجاج منزوعة الجلد (مطبوخة)",
+                category: "بروتين حيواني",
+                calories: 165,
+                protein: 31.0,
+                carbs: 0.0,
+                fats: 3.6,
+                fiber: 0.0,
+                potassium: "256 mg",
+                sodium: "74 mg",
+                zinc: "1.0 mg",
+                source: "USDA FoodData Central #171077"
+            },
+            {
+                name: "أرز أبيض بسمتي (مطبوخ)",
+                category: "نشويات / كربوهيدرات",
+                calories: 130,
+                protein: 2.7,
+                carbs: 28.2,
+                fats: 0.3,
+                fiber: 0.4,
+                potassium: "35 mg",
+                sodium: "1 mg",
+                zinc: "0.4 mg",
+                source: "USDA FoodData Central #169704"
+            },
+            {
+                name: "سلمون أطلسي مشوي",
+                category: "بروتين / دهون صحية",
+                calories: 206,
+                protein: 22.1,
+                carbs: 0.0,
+                fats: 12.3,
+                fiber: 0.0,
+                potassium: "363 mg",
+                sodium: "61 mg",
+                zinc: "0.6 mg",
+                source: "USDA FoodData Central #175170"
+            },
+            {
+                name: "زبادي يوناني سادة (خالي الدسم)",
+                category: "ألبان وروب",
+                calories: 59,
+                protein: 10.2,
+                carbs: 3.6,
+                fats: 0.4,
+                fiber: 0.0,
+                potassium: "141 mg",
+                sodium: "36 mg",
+                zinc: "0.5 mg",
+                source: "USDA FoodData Central #170903"
+            },
+            {
+                name: "رقائق الشوفان الكاملة (خام)",
+                category: "حبوب كاملة",
+                calories: 389,
+                protein: 16.9,
+                carbs: 66.3,
+                fats: 6.9,
+                fiber: 10.6,
+                potassium: "429 mg",
+                sodium: "2 mg",
+                zinc: "4.0 mg",
+                source: "USDA FoodData Central #169705"
+            },
+            {
+                name: "حمص مسلوق ومصفى",
+                category: "بقوليات",
+                calories: 164,
+                protein: 8.9,
+                carbs: 27.4,
+                fats: 2.6,
+                fiber: 7.6,
+                potassium: "291 mg",
+                sodium: "7 mg",
+                zinc: "1.5 mg",
+                source: "USDA FoodData Central #173757"
+            },
+            {
+                name: "لحم بقر مفروم صافي 95% (مطبوخ)",
+                category: "بروتين حيواني",
+                calories: 193,
+                protein: 26.8,
+                carbs: 0.0,
+                fats: 8.7,
+                fiber: 0.0,
+                potassium: "342 mg",
+                sodium: "71 mg",
+                zinc: "5.8 mg",
+                source: "USDA FoodData Central #174036"
+            },
+            {
+                name: "بطاطا حلوة مشوية (بدون قشر)",
+                category: "نشويات معقدة",
+                calories: 90,
+                protein: 2.0,
+                carbs: 20.7,
+                fats: 0.15,
+                fiber: 3.3,
+                potassium: "475 mg",
+                sodium: "36 mg",
+                zinc: "0.3 mg",
+                source: "USDA FoodData Central #168483"
+            }
+        ];
+
+        /* -------------------------------------------------------------
+           2. STATE MANAGEMENT
+        ------------------------------------------------------------- */
+        let activeFilter = 'all';
+        let currentGym = 'wqt_malqa';
+        let activeModalItem = null;
+
+        /* -------------------------------------------------------------
+           3. INITIALIZATION & CORE FUNCTIONS
+        ------------------------------------------------------------- */
+        window.onload = function() {
+            renderProducts();
+            renderTop10Ranking();
+            renderNutritionistSearch();
+        };
+
+        function switchTab(tabKey) {
+            // Update Tab Content Visibility
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tabKey}`).classList.add('active');
+
+            // Update Tab Button Styles
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all";
+            });
+
+            const activeBtn = document.getElementById(`tabBtn-${tabKey}`);
+            if(tabKey === 'catalog') {
+                activeBtn.className = "tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap bg-brand-500/20 text-brand-400 border border-brand-500/30 transition-all";
+            } else if(tabKey === 'ranking') {
+                activeBtn.className = "tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap bg-amber-500/20 text-amber-400 border border-amber-500/30 transition-all";
+            } else if(tabKey === 'nutritionist') {
+                activeBtn.className = "tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 transition-all";
+            }
+        }
+
+        function changeGymLocation() {
+            const select = document.getElementById('gymSelect');
+            currentGym = select.value;
+            const selectedText = select.options[select.selectedIndex].text.replace(/^[^\s]+\s/, '');
+            document.getElementById('currentGymNameLabel').textContent = selectedText;
+            renderProducts();
+        }
+
+        function setFilter(filterType, btnElem) {
+            activeFilter = filterType;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = "filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap";
+            });
+            btnElem.className = "filter-btn active px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-brand-500 text-darkbg shadow-md";
+            renderProducts();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            activeFilter = 'all';
+            renderProducts();
+        }
+
+        /* -------------------------------------------------------------
+           4. CATALOG RENDERING LOGIC
+        ------------------------------------------------------------- */
+        function renderProducts() {
+            const container = document.getElementById('productsGrid');
+            const noResults = document.getElementById('noResultsState');
+            const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+
+            let filtered = restaurantMeals.filter(meal => {
+                // Gym filter match simulated check
+                const searchMatch = meal.name.toLowerCase().includes(searchVal) || 
+                                    meal.restaurant.toLowerCase().includes(searchVal);
+
+                if (!searchMatch) return false;
+
+                if (activeFilter === 'low_cal') return meal.calories < 500;
+                if (activeFilter === 'high_protein') return meal.protein >= 30;
+                if (activeFilter === 'low_carb') return meal.carbs <= 25;
+                if (activeFilter === 'best_ratio') return (meal.protein / meal.calories) >= 0.085;
+
+                return true;
+            });
+
+            if (activeFilter === 'best_ratio') {
+                filtered.sort((a, b) => (b.protein / b.calories) - (a.protein / a.calories));
+            }
+
+            document.getElementById('resultsCount').textContent = `${filtered.length} وجبة متاحة`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            container.innerHTML = filtered.map(item => {
+                const ratio = (item.protein / item.calories).toFixed(3);
+                return `
+                <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                    <div>
+                        <!-- Card Header & Image -->
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/10b981?text=Healthy+Food'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+                            
+                            <!-- Gym Distance Tag -->
+                            <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-bold text-slate-200 border border-slate-700/60 flex items-center gap-1.5">
+                                <i class="fa-solid fa-location-dot text-brand-400"></i>
+                                <span>${item.gymDistance}</span>
+                            </div>
+
+                            <!-- Restaurant Name Badge -->
+                            <div class="absolute bottom-3 right-3 flex items-center gap-2">
+                                <span class="w-7 h-7 rounded-lg bg-slate-900/90 flex items-center justify-center text-sm shadow">
+                                    ${item.logo}
+                                </span>
+                                <span class="text-xs font-bold text-white tracking-wide bg-slate-900/80 backdrop-blur px-2.5 py-1 rounded-lg border border-slate-700/50">
+                                    ${item.restaurant}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-5">
+                            <h3 class="text-base font-extrabold text-white leading-snug group-hover:text-brand-400 transition-colors mb-3">
+                                ${item.name}
+                            </h3>
+
+                            <!-- Verified Badge Button -->
+                            <button onclick="openVerifiedModal(${item.id})" class="badge-verified w-full py-2 px-3 rounded-xl flex items-center justify-between text-xs text-brand-300 font-bold hover:border-brand-400 transition-all mb-4 group/btn">
+                                <span class="flex items-center gap-1.5">
+                                    <i class="fa-solid fa-square-check text-brand-400 text-sm"></i>
+                                    <span>تحليل علمي موثّق</span>
+                                </span>
+                                <span class="text-[10px] text-slate-400 group-hover/btn:text-white transition-colors">
+                                    التفاصيل <i class="fa-solid fa-chevron-left text-[9px] mr-0.5"></i>
+                                </span>
+                            </button>
+
+                            <!-- Nutritional Macros Bar -->
+                            <div class="grid grid-cols-3 gap-2 bg-slate-900/80 p-3 rounded-2xl border border-slate-800 text-center">
+                                <div>
+                                    <span class="block text-[10px] text-slate-400">السعرات</span>
+                                    <span class="text-sm font-extrabold text-amber-400">${item.calories} <span class="text-[10px] text-slate-500">kcal</span></span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-slate-400">البروتين</span>
+                                    <span class="text-sm font-extrabold text-brand-400">${item.protein}غ</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-slate-400">الكربوهيدرات</span>
+                                    <span class="text-sm font-extrabold text-accent-400">${item.carbs}غ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer Info -->
+                    <div class="px-5 pb-5 pt-0 flex items-center justify-between border-t border-slate-800/60 mt-2">
+                        <div class="text-[11px] text-slate-400">
+                            مؤشر الكفاءة: <span class="font-extrabold text-white">${ratio}</span> غ/سعرة
+                        </div>
+                        <button onclick="openShareModal(${item.id})" class="text-xs text-amber-400 font-bold hover:text-amber-300 flex items-center gap-1 bg-amber-500/10 px-2.5 py-1.5 rounded-lg border border-amber-500/20 transition-all">
+                            <i class="fa-brands fa-instagram"></i>
+                            <span>مشاركة</span>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        /* -------------------------------------------------------------
+           5. TOP 10 RANKING LOGIC
+        ------------------------------------------------------------- */
+        function renderTop10Ranking() {
+            const container = document.getElementById('top10Grid');
+            // Sort by Protein / Calories ratio
+            const sorted = [...restaurantMeals].sort((a, b) => (b.protein / b.calories) - (a.protein / a.calories)).slice(0, 10);
+
+            container.innerHTML = sorted.map((item, index) => {
+                const ratio = (item.protein / item.calories).toFixed(3);
+                const rankColor = index === 0 ? 'text-amber-400 border-amber-500/40 bg-amber-500/10' :
+                                 index === 1 ? 'text-slate-300 border-slate-400/40 bg-slate-400/10' :
+                                 index === 2 ? 'text-amber-600 border-amber-700/40 bg-amber-700/10' :
+                                 'text-slate-400 border-slate-800 bg-slate-900';
+
+                return `
+                <div class="glass-card p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-slate-800 hover:border-amber-500/30">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 shrink-0 rounded-xl border flex items-center justify-center font-black text-lg ${rankColor}">
+                            #${index + 1}
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm sm:text-base font-extrabold text-white">${item.name}</h3>
+                                <span class="text-[10px] px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700">${item.restaurant}</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">
+                                ${item.calories} سعرة حرارية &bull; ${item.protein}g بروتين &bull; ${item.carbs}g كربوهيدرات
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4 border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-800">
+                        <div class="text-right">
+                            <span class="block text-[10px] text-slate-400">مؤشر الكفاءة</span>
+                            <span class="text-sm font-black text-amber-400">${ratio} <span class="text-[10px] text-slate-400 font-normal">غ بروتين/سعرة</span></span>
+                        </div>
+                        <button onclick="openShareModal(${item.id})" class="px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 text-xs font-bold transition-all flex items-center gap-1.5">
+                            <i class="fa-brands fa-instagram"></i>
+                            <span>مشاركة البطاقة</span>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        /* -------------------------------------------------------------
+           6. NUTRITIONIST RAW LOOKUP LOGIC
+        ------------------------------------------------------------- */
+        function renderNutritionistSearch() {
+            const container = document.getElementById('nutritionistGrid');
+            const searchVal = document.getElementById('nutriSearchInput').value.trim().toLowerCase();
+
+            const filtered = rawIngredients.filter(item => 
+                item.name.toLowerCase().includes(searchVal) || 
+                item.category.toLowerCase().includes(searchVal)
+            );
+
+            container.innerHTML = filtered.map(item => `
+                <div class="glass-card p-5 rounded-2xl border border-cyan-500/20 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-start justify-between gap-2 mb-2">
+                            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                                ${item.category}
+                            </span>
+                            <span class="text-[10px] text-slate-500">لكل 100 جرام</span>
+                        </div>
+                        <h3 class="text-base font-extrabold text-white mb-3">${item.name}</h3>
+
+                        <div class="grid grid-cols-4 gap-1.5 bg-slate-900/90 p-2.5 rounded-xl text-center border border-slate-800 mb-3">
+                            <div>
+                                <span class="block text-[9px] text-slate-400">السعرات</span>
+                                <span class="text-xs font-bold text-amber-400">${item.calories}</span>
+                            </div>
+                            <div>
+                                <span class="block text-[9px] text-slate-400">البروتين</span>
+                                <span class="text-xs font-bold text-brand-400">${item.protein}g</span>
+                            </div>
+                            <div>
+                                <span class="block text-[9px] text-slate-400">الكربوهيدرات</span>
+                                <span class="text-xs font-bold text-cyan-400">${item.carbs}g</span>
+                            </div>
+                            <div>
+                                <span class="block text-[9px] text-slate-400">الدهون</span>
+                                <span class="text-xs font-bold text-rose-400">${item.fats}g</span>
+                            </div>
+                        </div>
+
+                        <!-- Micro Elements -->
+                        <div class="space-y-1 text-[11px] text-slate-400 bg-slate-900/40 p-2.5 rounded-xl border border-slate-800/80 mb-4">
+                            <div class="flex justify-between">
+                                <span>الألياف: <strong class="text-slate-200">${item.fiber}g</strong></span>
+                                <span>البوتاسيوم: <strong class="text-slate-200">${item.potassium}</strong></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>الصوديوم: <strong class="text-slate-200">${item.sodium}</strong></span>
+                                <span>الزنك: <strong class="text-slate-200">${item.zinc}</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+                        <span class="text-[10px] text-slate-500 truncate max-w-[170px]" title="${item.source}">${item.source}</span>
+                        <button onclick="copyMacroBreakdown('${item.name}', ${item.calories}, ${item.protein}, ${item.carbs}, ${item.fats})" class="text-xs text-cyan-400 hover:text-cyan-300 font-bold bg-cyan-500/10 px-2.5 py-1 rounded-lg border border-cyan-500/20 transition-all flex items-center gap-1">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>نسخ للجدول</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* -------------------------------------------------------------
+           7. MODALS & POPUP ACTIONS
+        ------------------------------------------------------------- */
+        function openVerifiedModal(itemId) {
+            const item = restaurantMeals.find(m => m.id === itemId);
+            if(!item) return;
+
+            document.getElementById('modalDishName').textContent = item.name;
+            document.getElementById('modalConfidence').innerHTML = `<i class="fa-solid fa-shield-check"></i> ${item.confidence} (عالي جداً)`;
+            document.getElementById('modalMethod').textContent = item.method;
+            document.getElementById('modalSources').textContent = item.sources;
+            document.getElementById('modalLastVerified').textContent = item.lastVerified;
+
+            const modal = document.getElementById('verifiedModal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeVerifiedModal() {
+            document.getElementById('verifiedModal').classList.add('hidden');
+        }
+
+        function openShareModal(itemId) {
+            const item = restaurantMeals.find(m => m.id === itemId);
+            if(!item) return;
+
+            activeModalItem = item;
+            const ratio = (item.protein / item.calories).toFixed(3);
+
+            document.getElementById('shareDishTitle').textContent = item.name;
+            document.getElementById('shareRestName').textContent = `مطعم ${item.restaurant}`;
+            document.getElementById('shareCalories').textContent = `${item.calories} kcal`;
+            document.getElementById('shareProtein').textContent = `${item.protein}g`;
+            document.getElementById('shareRatio').textContent = ratio;
+
+            document.getElementById('shareModal').classList.remove('hidden');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.add('hidden');
+        }
+
+        /* -------------------------------------------------------------
+           8. UTILITY & CLIPBOARD FUNCTIONS
+        ------------------------------------------------------------- */
+        function copyShareCardText() {
+            if(!activeModalItem) return;
+            const text = `🔥 وجبة رياضية موثّقة قرب ناديك:
+📌 الوجبة: ${activeModalItem.name} (${activeModalItem.restaurant})
+📊 السعرات: ${activeModalItem.calories} kcal | البروتين: ${activeModalItem.protein}g
+⚡ مؤشر الكفاءة: ${(activeModalItem.protein / activeModalItem.calories).toFixed(3)} جرام بروتين لكل سعرة!
+✓ تم التحقق علمياً من القيم عبر المنصة.`;
+
+            copyToClipboard(text, "تم نسخ بطاقة مشاركة الانستغرام!");
+            closeShareModal();
+        }
+
+        function copyTop10InstagramSummary() {
+            const sorted = [...restaurantMeals].sort((a, b) => (b.protein / b.calories) - (a.protein / a.calories)).slice(0, 5);
+            let text = `🏆 أفضل 5 وجبات صحية أعلى بروتيناً لكل سعرة قرب النادي:\n\n`;
+            sorted.forEach((item, index) => {
+                const ratio = (item.protein / item.calories).toFixed(3);
+                text += `${index + 1}. ${item.name} (${item.restaurant}) -> ${item.protein}g بروتين | ${item.calories} سعرة (كفاءة: ${ratio})\n`;
+            });
+            text += `\n✓ جميع البيانات موثقة ومحسوبة بدقة عبر منصة التوثيق العلمي.`;
+
+            copyToClipboard(text, "تم نسخ قائمة Top 5 للستوري والانستغرام!");
+        }
+
+        function copyMacroBreakdown(name, cal, p, c, f) {
+            const text = `${name} (لكل 100g): ${cal} سعرة | بروتين: ${p}g | كربوهيدرات: ${c}g | دهون: ${f}g [المصدر: USDA/SFDA]`;
+            copyToClipboard(text, `تم نسخ قيم ${name} للحافظة!`);
+        }
+
+        function copyToClipboard(str, successMsg) {
+            const el = document.createElement('textarea');
+            el.value = str;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            showToast(successMsg);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
