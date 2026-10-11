@@ -111,6 +111,58 @@
         .tab-content.active {
             display: block;
             opacity: 1;
+            animation: fadeUp 0.35s ease-out;
+        }
+
+        /* Hide scrollbars on horizontally scrolling rows (tabs, pills) */
+        .no-scrollbar { scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        /* Entrance animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeUp 0.25s ease-out; }
+
+        /* Macro split bar: protein / carbs / fat share of calories */
+        .macro-bar {
+            display: flex;
+            height: 8px;
+            border-radius: 9999px;
+            overflow: hidden;
+            background: #1e293b;
+            gap: 2px;
+        }
+        .macro-bar > span { display: block; height: 100%; transition: width 0.5s ease; }
+        .macro-bar > span:first-child { border-radius: 0 9999px 9999px 0; }
+        .macro-bar > span:last-child { border-radius: 9999px 0 0 9999px; }
+
+        /* Efficiency meter */
+        .meter {
+            height: 6px;
+            border-radius: 9999px;
+            background: #1e293b;
+            overflow: hidden;
+        }
+        .meter > span {
+            display: block;
+            height: 100%;
+            border-radius: 9999px;
+            background: linear-gradient(270deg, #10b981, #22d3ee);
+        }
+
+        /* Keyboard focus that is visible on the dark surfaces */
+        button:focus-visible, select:focus-visible, input:focus-visible {
+            outline: 2px solid #34d399;
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
@@ -119,7 +171,7 @@
     <!-- TOP NAVIGATION / BRANDING HEADER -->
     <header class="sticky top-0 z-40 glass-panel border-b border-bordercolor/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
+            <div class="flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-3 gap-y-2 py-3 sm:py-0 sm:h-20">
                 
                 <!-- Logo & Title -->
                 <div class="flex items-center gap-3">
@@ -140,8 +192,8 @@
                 </div>
 
                 <!-- Gym Location Selector Dropdown -->
-                <div class="flex items-center gap-3">
-                    <div class="relative min-w-[180px] sm:min-w-[240px]">
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <div class="relative w-full sm:w-[260px]">
                         <label for="gymSelect" class="block text-[10px] text-brand-400 font-bold mb-0.5">النادي المحدد حالياً:</label>
                         <div class="relative">
                             <select id="gymSelect" onchange="changeGymLocation()" class="w-full bg-slate-900/90 text-slate-100 text-xs sm:text-sm rounded-xl px-3 py-2 pl-8 border border-slate-700/80 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 appearance-none font-medium cursor-pointer shadow-inner">
@@ -162,16 +214,16 @@
         <!-- MAIN TABS CONTROL -->
         <div class="border-t border-slate-800/80 bg-slate-950/60">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <nav class="flex space-x-2 space-x-reverse overflow-x-auto py-2.5 no-scrollbar text-sm font-semibold">
-                    <button id="tabBtn-catalog" onclick="switchTab('catalog')" class="tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap bg-brand-500/20 text-brand-400 border border-brand-500/30 transition-all">
+                <nav role="tablist" aria-label="أقسام المنصة" class="flex gap-2 overflow-x-auto py-2.5 no-scrollbar text-sm font-semibold">
+                    <button id="tabBtn-catalog" role="tab" aria-selected="true" aria-controls="tab-catalog" onclick="switchTab('catalog')" class="tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap bg-brand-500/20 text-brand-400 border border-brand-500/30 transition-all">
                         <i class="fa-solid fa-utensils text-xs"></i>
-                        <span>قائمةالوجبات القريبة</span>
+                        <span>قائمة الوجبات القريبة</span>
                     </button>
-                    <button id="tabBtn-ranking" onclick="switchTab('ranking')" class="tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
+                    <button id="tabBtn-ranking" role="tab" aria-selected="false" aria-controls="tab-ranking" onclick="switchTab('ranking')" class="tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
                         <i class="fa-solid fa-trophy text-amber-400 text-xs"></i>
                         <span>الأعلى بروتيناً لكل سعرة (Top 10)</span>
                     </button>
-                    <button id="tabBtn-nutritionist" onclick="switchTab('nutritionist')" class="tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
+                    <button id="tabBtn-nutritionist" role="tab" aria-selected="false" aria-controls="tab-nutritionist" onclick="switchTab('nutritionist')" class="tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all">
                         <i class="fa-solid fa-stethoscope text-cyan-400 text-xs"></i>
                         <span>دليل أخصائي التغذية</span>
                         <span class="bg-cyan-500/10 text-cyan-400 text-[10px] px-2 py-0.5 rounded-full border border-cyan-500/20">بحث خام</span>
@@ -199,17 +251,17 @@
                         بيانات وجبات المطاعم الصحية القريبة مغذاة ومحسوبة مباشرة من نتائج الفحص والمراجع الموثوقة مع إمكانية التحقق من مصدر كل رقم.
                     </p>
                 </div>
-                <div class="flex flex-wrap sm:flex-nowrap gap-3 items-center">
-                    <div class="bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-2xl p-3.5 text-center flex-1 min-w-[120px]">
-                        <span class="block text-2xl font-extrabold text-brand-400" id="statVerifiedCount">142</span>
+                <div class="grid grid-cols-3 gap-3 md:flex md:flex-nowrap items-center">
+                    <div class="bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-2xl p-3 sm:p-3.5 text-center md:min-w-[120px]">
+                        <span class="block text-2xl font-extrabold text-brand-400" id="statVerifiedCount">—</span>
                         <span class="text-xs text-slate-400 font-medium">وجبة موثّقة</span>
                     </div>
-                    <div class="bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-2xl p-3.5 text-center flex-1 min-w-[120px]">
-                        <span class="block text-2xl font-extrabold text-accent-400" id="statAccuracy">99.2%</span>
-                        <span class="text-xs text-slate-400 font-medium">دقة البيانات</span>
+                    <div class="bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-2xl p-3 sm:p-3.5 text-center md:min-w-[120px]">
+                        <span class="block text-2xl font-extrabold text-accent-400" id="statAccuracy">—</span>
+                        <span class="text-xs text-slate-400 font-medium">متوسط الثقة</span>
                     </div>
-                    <div class="bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-2xl p-3.5 text-center flex-1 min-w-[120px]">
-                        <span class="block text-2xl font-extrabold text-amber-400">12</span>
+                    <div class="bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-2xl p-3 sm:p-3.5 text-center md:min-w-[120px]">
+                        <span class="block text-2xl font-extrabold text-amber-400" id="statBrands">—</span>
                         <span class="text-xs text-slate-400 font-medium">براند صحي</span>
                     </div>
                 </div>
@@ -217,7 +269,7 @@
         </section>
 
         <!-- TAB 1: RESTAURANT MEALS CATALOG -->
-        <div id="tab-catalog" class="tab-content active">
+        <div id="tab-catalog" role="tabpanel" aria-labelledby="tabBtn-catalog" class="tab-content active">
             
             <!-- Filter & Search Controls Bar -->
             <div class="glass-panel rounded-2xl p-4 sm:p-5 mb-8 border border-slate-800 shadow-lg">
@@ -232,19 +284,19 @@
 
                     <!-- Quick Filter Pills -->
                     <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-                        <button onclick="setFilter('all', this)" class="filter-btn active px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-brand-500 text-darkbg shadow-md">
+                        <button data-filter="all" aria-pressed="true" onclick="setFilter('all')" class="filter-btn active px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-brand-500 text-darkbg shadow-md">
                             الكل
                         </button>
-                        <button onclick="setFilter('low_cal', this)" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
+                        <button data-filter="low_cal" aria-pressed="false" onclick="setFilter('low_cal')" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
                             🔥 أقل من 500 سعرة
                         </button>
-                        <button onclick="setFilter('high_protein', this)" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
+                        <button data-filter="high_protein" aria-pressed="false" onclick="setFilter('high_protein')" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
                             💪 بروتين فوق 30غ
                         </button>
-                        <button onclick="setFilter('low_carb', this)" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
+                        <button data-filter="low_carb" aria-pressed="false" onclick="setFilter('low_carb')" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
                             🥗 كربوهيدرات منخفضة (&lt;25غ)
                         </button>
-                        <button onclick="setFilter('best_ratio', this)" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
+                        <button data-filter="best_ratio" aria-pressed="false" onclick="setFilter('best_ratio')" class="filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap">
                             ⚡ أعلى كفاءة بروتين
                         </button>
                     </div>
@@ -253,13 +305,29 @@
             </div>
 
             <!-- Products Grid Header & Active Count -->
-            <div class="flex items-center justify-between mb-4 px-1">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 px-1">
                 <p class="text-xs sm:text-sm text-slate-400">
-                    عرض الوجبات المتاحة للتوصيل أو الاستلام بالقرب من <span id="currentGymNameLabel" class="text-brand-400 font-bold">وقت اللياقة - الملقا</span>:
+                    الوجبات المتاحة للتوصيل أو الاستلام بالقرب من <span id="currentGymNameLabel" class="text-brand-400 font-bold">وقت اللياقة - الملقا</span>
+                    <span id="resultsCount" class="inline-block mr-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-slate-300">…</span>
                 </p>
-                <span id="resultsCount" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300">
-                    جاري التحميل...
-                </span>
+                <label class="flex items-center gap-2 text-xs text-slate-400 shrink-0">
+                    <i class="fa-solid fa-arrow-down-wide-short"></i>
+                    <span>ترتيب حسب</span>
+                    <select id="sortSelect" onchange="renderProducts()" class="bg-slate-900/90 text-slate-100 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700/80 focus:border-brand-500 focus:outline-none cursor-pointer">
+                        <option value="distance">الأقرب للنادي</option>
+                        <option value="ratio">أعلى كفاءة بروتين</option>
+                        <option value="protein">أعلى بروتين</option>
+                        <option value="calories">أقل سعرات</option>
+                    </select>
+                </label>
+            </div>
+
+            <!-- Macro colour legend -->
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mb-4 px-1 text-[11px] text-slate-400" aria-hidden="true">
+                <span>توزيع السعرات:</span>
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-brand-400"></span>بروتين</span>
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-accent-400"></span>كربوهيدرات</span>
+                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>دهون</span>
             </div>
 
             <!-- Products Grid Container -->
@@ -269,7 +337,7 @@
 
             <!-- Empty State fallback -->
             <div id="noResultsState" class="hidden text-center py-16 px-4 glass-panel rounded-3xl mt-6">
-                <i class="fa-solid fa-utensils-slash text-4xl text-slate-600 mb-3"></i>
+                <i class="fa-solid fa-bowl-food text-4xl text-slate-600 mb-3"></i>
                 <h3 class="text-lg font-bold text-white">لم نجد وجبات تطابق خيارات الفلترة الحالية</h3>
                 <p class="text-slate-400 text-xs mt-1">جرّب تغيير كلمات البحث أو اختيار فلتر آخر.</p>
                 <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-brand-500 text-darkbg font-bold rounded-xl text-xs hover:bg-brand-400 transition-all">
@@ -280,7 +348,7 @@
         </div>
 
         <!-- TAB 2: HIGH PROTEIN EFFICIENCY TOP 10 (INSTAGRAM READY) -->
-        <div id="tab-ranking" class="tab-content">
+        <div id="tab-ranking" role="tabpanel" aria-labelledby="tabBtn-ranking" class="tab-content">
             
             <div class="glass-panel rounded-3xl p-6 sm:p-8 mb-8 border border-amber-500/20 relative overflow-hidden">
                 <div class="absolute -left-10 -bottom-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl"></div>
@@ -310,7 +378,7 @@
         </div>
 
         <!-- TAB 3: NUTRITIONIST RAW INGREDIENTS DATABASE -->
-        <div id="tab-nutritionist" class="tab-content">
+        <div id="tab-nutritionist" role="tabpanel" aria-labelledby="tabBtn-nutritionist" class="tab-content">
             
             <div class="glass-panel rounded-3xl p-6 sm:p-8 mb-8 border border-cyan-500/20 relative overflow-hidden">
                 <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl"></div>
@@ -340,15 +408,21 @@
                 <!-- Loaded Dynamically -->
             </div>
 
+            <div id="nutriNoResults" class="hidden text-center py-16 px-4 glass-panel rounded-3xl">
+                <i class="fa-solid fa-magnifying-glass text-4xl text-slate-600 mb-3"></i>
+                <h3 class="text-lg font-bold text-white">لا توجد أغذية مطابقة لبحثك</h3>
+                <p class="text-slate-400 text-xs mt-1">جرّب اسماً أبسط أو اسم فئة مثل "بقوليات".</p>
+            </div>
+
         </div>
 
     </main>
 
     <!-- MODAL 1: VERIFIED SCIENTIFIC ANALYSIS DETAILS MODAL -->
-    <div id="verifiedModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-opacity">
-        <div class="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-7 border border-brand-500/30 relative shadow-2xl animate-fade-in">
+    <div id="verifiedModal" role="dialog" aria-modal="true" aria-labelledby="modalDishName" onclick="if(event.target===this) closeVerifiedModal()" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-opacity">
+        <div class="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-7 border border-brand-500/30 relative shadow-2xl animate-fade-in max-h-[90vh] overflow-y-auto">
             
-            <button onclick="closeVerifiedModal()" class="absolute top-5 left-5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
+            <button onclick="closeVerifiedModal()" aria-label="إغلاق" class="absolute top-5 left-5 text-slate-400 hover:text-white text-lg w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
@@ -366,7 +440,7 @@
                 <div class="flex justify-between items-center text-xs pb-2 border-b border-slate-800">
                     <span class="text-slate-400">مستوى الثقة والإثبات:</span>
                     <span class="font-bold text-brand-400 flex items-center gap-1" id="modalConfidence">
-                        <i class="fa-solid fa-shield-check"></i> 98% (عالي جداً)
+                        <i class="fa-solid fa-shield-halved"></i> 98% (عالي جداً)
                     </span>
                 </div>
                 <div class="flex justify-between items-center text-xs pb-2 border-b border-slate-800">
@@ -381,6 +455,15 @@
                     <span class="text-slate-400">تاريخ آخر مراجعة وتدقيق:</span>
                     <span class="font-bold text-slate-300" id="modalLastVerified">أكتوبر 2026</span>
                 </div>
+            </div>
+
+            <div class="mb-5">
+                <div class="flex justify-between text-[11px] text-slate-400 mb-1.5">
+                    <span>توزيع السعرات على المغذيات الكبرى</span>
+                    <span id="modalCalories" class="font-bold text-amber-400"></span>
+                </div>
+                <div id="modalMacroBar" class="macro-bar"></div>
+                <div id="modalMacroLegend" class="grid grid-cols-3 gap-2 mt-2 text-center text-[11px]"></div>
             </div>
 
             <div class="bg-brand-500/10 border border-brand-500/20 rounded-2xl p-4 text-xs text-brand-300 flex items-start gap-3 mb-6">
@@ -400,13 +483,13 @@
     </div>
 
     <!-- MODAL 2: INSTAGRAM CARD SHARE PREVIEW -->
-    <div id="shareModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
-        <div class="glass-panel w-full max-w-md rounded-3xl p-6 border border-amber-500/30 relative shadow-2xl">
-            <button onclick="closeShareModal()" class="absolute top-4 left-4 text-slate-400 hover:text-white w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
+    <div id="shareModal" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle" onclick="if(event.target===this) closeShareModal()" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 border border-amber-500/30 relative shadow-2xl animate-fade-in max-h-[90vh] overflow-y-auto">
+            <button onclick="closeShareModal()" aria-label="إغلاق" class="absolute top-4 left-4 text-slate-400 hover:text-white w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <h3 class="text-lg font-bold text-white mb-2 text-center">بطاقة المشاركة للستوري والانستغرام</h3>
+            <h3 id="shareModalTitle" class="text-lg font-bold text-white mb-2 text-center">بطاقة المشاركة للستوري والانستغرام</h3>
             <p class="text-xs text-slate-400 text-center mb-4">جاهزة للنسخ والمشاركة مع أصدقائك في النادي</p>
 
             <!-- Styled Shareable Card Box -->
@@ -452,7 +535,7 @@
     </div>
 
     <!-- Toast Notification Popup -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-slate-100 border border-brand-500 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transition-all duration-300 translate-y-20 opacity-0 pointer-events-none">
+    <div id="toast" role="status" aria-live="polite" class="fixed bottom-6 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-6 z-50 bg-slate-900 text-slate-100 border border-brand-500 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transition-all duration-300 translate-y-20 opacity-0 pointer-events-none">
         <i class="fa-solid fa-circle-check text-brand-400 text-lg"></i>
         <span id="toastMsg" class="text-xs sm:text-sm font-semibold">تم النسخ بنجاح!</span>
     </div>
@@ -723,13 +806,71 @@
         let currentGym = 'wqt_malqa';
         let activeModalItem = null;
 
+        // Inline fallback so a broken image never triggers another network request
+        const FALLBACK_IMG = "data:image/svg+xml;utf8," + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="600" height="400" fill="#1e293b"/><text x="300" y="215" font-family="sans-serif" font-size="28" fill="#10b981" text-anchor="middle">NutriSyria</text></svg>'
+        );
+
+        const FILTER_BTN_IDLE = "filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap";
+        const FILTER_BTN_ACTIVE = "filter-btn active px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-brand-500 text-darkbg shadow-md whitespace-nowrap";
+
         /* -------------------------------------------------------------
            3. INITIALIZATION & CORE FUNCTIONS
         ------------------------------------------------------------- */
         window.onload = function() {
+            renderHeroStats();
             renderProducts();
             renderTop10Ranking();
             renderNutritionistSearch();
+        };
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                closeVerifiedModal();
+                closeShareModal();
+            }
+        });
+
+        const efficiency = item => item.protein / item.calories;
+        const distanceKm = item => parseFloat(item.gymDistance);
+
+        // Share of calories coming from each macro (4/4/9 kcal per gram)
+        function macroSplit(item) {
+            const p = item.protein * 4, c = item.carbs * 4, f = item.fats * 9;
+            const total = p + c + f || 1;
+            return {
+                protein: Math.round(p / total * 100),
+                carbs: Math.round(c / total * 100),
+                fats: Math.round(f / total * 100)
+            };
+        }
+
+        function macroBarHTML(item) {
+            const m = macroSplit(item);
+            return `
+                <div class="macro-bar" role="img" aria-label="بروتين ${m.protein}٪، كربوهيدرات ${m.carbs}٪، دهون ${m.fats}٪ من السعرات">
+                    <span class="bg-brand-400" style="width:${m.protein}%"></span>
+                    <span class="bg-accent-400" style="width:${m.carbs}%"></span>
+                    <span class="bg-rose-400" style="width:${m.fats}%"></span>
+                </div>`;
+        }
+
+        function confidenceLabel(conf) {
+            const v = parseFloat(conf);
+            return v >= 98 ? 'عالي جداً' : v >= 95 ? 'عالي' : 'متوسط';
+        }
+
+        function renderHeroStats() {
+            const avgConf = restaurantMeals.reduce((s, m) => s + parseFloat(m.confidence), 0) / restaurantMeals.length;
+            document.getElementById('statVerifiedCount').textContent = restaurantMeals.length;
+            document.getElementById('statAccuracy').textContent = `${avgConf.toFixed(1)}%`;
+            document.getElementById('statBrands').textContent = new Set(restaurantMeals.map(m => m.restaurant)).size;
+        }
+
+        const TAB_ACTIVE_STYLES = {
+            catalog: "bg-brand-500/20 text-brand-400 border border-brand-500/30",
+            ranking: "bg-amber-500/20 text-amber-400 border border-amber-500/30",
+            nutritionist: "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30"
         };
 
         function switchTab(tabKey) {
@@ -739,17 +880,12 @@
 
             // Update Tab Button Styles
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.className = "tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all";
+                const key = btn.id.replace('tabBtn-', '');
+                const isActive = key === tabKey;
+                btn.setAttribute('aria-selected', isActive);
+                btn.className = "tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap transition-all " +
+                    (isActive ? TAB_ACTIVE_STYLES[key] : "border border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/50");
             });
-
-            const activeBtn = document.getElementById(`tabBtn-${tabKey}`);
-            if(tabKey === 'catalog') {
-                activeBtn.className = "tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap bg-brand-500/20 text-brand-400 border border-brand-500/30 transition-all";
-            } else if(tabKey === 'ranking') {
-                activeBtn.className = "tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap bg-amber-500/20 text-amber-400 border border-amber-500/30 transition-all";
-            } else if(tabKey === 'nutritionist') {
-                activeBtn.className = "tab-btn px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 transition-all";
-            }
         }
 
         function changeGymLocation() {
@@ -760,19 +896,19 @@
             renderProducts();
         }
 
-        function setFilter(filterType, btnElem) {
+        function setFilter(filterType) {
             activeFilter = filterType;
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.className = "filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700/60 transition-all whitespace-nowrap";
+                const isActive = btn.dataset.filter === filterType;
+                btn.className = isActive ? FILTER_BTN_ACTIVE : FILTER_BTN_IDLE;
+                btn.setAttribute('aria-pressed', isActive);
             });
-            btnElem.className = "filter-btn active px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-brand-500 text-darkbg shadow-md";
             renderProducts();
         }
 
         function resetFilters() {
             document.getElementById('searchInput').value = '';
-            activeFilter = 'all';
-            renderProducts();
+            setFilter('all');
         }
 
         /* -------------------------------------------------------------
@@ -782,9 +918,11 @@
             const container = document.getElementById('productsGrid');
             const noResults = document.getElementById('noResultsState');
             const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+            const sortBy = document.getElementById('sortSelect').value;
 
             let filtered = restaurantMeals.filter(meal => {
-                // Gym filter match simulated check
+                if (!meal.gymsNear.includes(currentGym)) return false;
+
                 const searchMatch = meal.name.toLowerCase().includes(searchVal) || 
                                     meal.restaurant.toLowerCase().includes(searchVal);
 
@@ -793,16 +931,20 @@
                 if (activeFilter === 'low_cal') return meal.calories < 500;
                 if (activeFilter === 'high_protein') return meal.protein >= 30;
                 if (activeFilter === 'low_carb') return meal.carbs <= 25;
-                if (activeFilter === 'best_ratio') return (meal.protein / meal.calories) >= 0.085;
+                if (activeFilter === 'best_ratio') return efficiency(meal) >= 0.085;
 
                 return true;
             });
 
-            if (activeFilter === 'best_ratio') {
-                filtered.sort((a, b) => (b.protein / b.calories) - (a.protein / a.calories));
-            }
+            const sorters = {
+                distance: (a, b) => distanceKm(a) - distanceKm(b),
+                ratio: (a, b) => efficiency(b) - efficiency(a),
+                protein: (a, b) => b.protein - a.protein,
+                calories: (a, b) => a.calories - b.calories
+            };
+            filtered.sort(activeFilter === 'best_ratio' ? sorters.ratio : sorters[sortBy]);
 
-            document.getElementById('resultsCount').textContent = `${filtered.length} وجبة متاحة`;
+            document.getElementById('resultsCount').textContent = `${filtered.length} وجبة`;
 
             if (filtered.length === 0) {
                 container.innerHTML = '';
@@ -812,20 +954,29 @@
                 noResults.classList.add('hidden');
             }
 
+            const bestRatio = Math.max(...restaurantMeals.map(efficiency));
+
             container.innerHTML = filtered.map(item => {
-                const ratio = (item.protein / item.calories).toFixed(3);
+                const ratio = efficiency(item);
+                const meterPct = Math.round(ratio / bestRatio * 100);
                 return `
-                <div class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
+                <article class="glass-card rounded-3xl overflow-hidden flex flex-col justify-between group">
                     <div>
                         <!-- Card Header & Image -->
-                        <div class="relative h-48 overflow-hidden">
-                            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/10b981?text=Healthy+Food'">
+                        <div class="relative h-44 overflow-hidden">
+                            <img src="${item.image}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null;this.src=FALLBACK_IMG">
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
                             
                             <!-- Gym Distance Tag -->
                             <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-bold text-slate-200 border border-slate-700/60 flex items-center gap-1.5">
                                 <i class="fa-solid fa-location-dot text-brand-400"></i>
                                 <span>${item.gymDistance}</span>
+                            </div>
+
+                            <!-- Verified Confidence Tag -->
+                            <div class="absolute top-3 left-3 bg-brand-500/90 text-slate-950 px-2 py-1 rounded-full text-[10px] font-black flex items-center gap-1 shadow">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>${item.confidence}</span>
                             </div>
 
                             <!-- Restaurant Name Badge -->
@@ -841,50 +992,53 @@
 
                         <!-- Card Body -->
                         <div class="p-5">
-                            <h3 class="text-base font-extrabold text-white leading-snug group-hover:text-brand-400 transition-colors mb-3">
+                            <h3 class="text-base font-extrabold text-white leading-snug group-hover:text-brand-400 transition-colors mb-4 min-h-[2.75rem]">
                                 ${item.name}
                             </h3>
 
-                            <!-- Verified Badge Button -->
-                            <button onclick="openVerifiedModal(${item.id})" class="badge-verified w-full py-2 px-3 rounded-xl flex items-center justify-between text-xs text-brand-300 font-bold hover:border-brand-400 transition-all mb-4 group/btn">
-                                <span class="flex items-center gap-1.5">
-                                    <i class="fa-solid fa-square-check text-brand-400 text-sm"></i>
-                                    <span>تحليل علمي موثّق</span>
-                                </span>
-                                <span class="text-[10px] text-slate-400 group-hover/btn:text-white transition-colors">
-                                    التفاصيل <i class="fa-solid fa-chevron-left text-[9px] mr-0.5"></i>
-                                </span>
-                            </button>
-
-                            <!-- Nutritional Macros Bar -->
-                            <div class="grid grid-cols-3 gap-2 bg-slate-900/80 p-3 rounded-2xl border border-slate-800 text-center">
-                                <div>
-                                    <span class="block text-[10px] text-slate-400">السعرات</span>
-                                    <span class="text-sm font-extrabold text-amber-400">${item.calories} <span class="text-[10px] text-slate-500">kcal</span></span>
-                                </div>
+                            <!-- Headline numbers -->
+                            <div class="flex items-end justify-between mb-3">
                                 <div>
                                     <span class="block text-[10px] text-slate-400">البروتين</span>
-                                    <span class="text-sm font-extrabold text-brand-400">${item.protein}غ</span>
+                                    <span class="text-3xl font-black text-brand-400 leading-none">${item.protein}<span class="text-sm font-bold mr-0.5">غ</span></span>
                                 </div>
-                                <div>
-                                    <span class="block text-[10px] text-slate-400">الكربوهيدرات</span>
-                                    <span class="text-sm font-extrabold text-accent-400">${item.carbs}غ</span>
+                                <div class="text-left">
+                                    <span class="block text-[10px] text-slate-400">السعرات</span>
+                                    <span class="text-lg font-extrabold text-amber-400 leading-none">${item.calories} <span class="text-[10px] text-slate-500 font-semibold">kcal</span></span>
                                 </div>
+                            </div>
+
+                            <!-- Macro split -->
+                            ${macroBarHTML(item)}
+                            <div class="flex justify-between mt-2 text-[11px] text-slate-400">
+                                <span>بروتين <strong class="text-slate-200">${item.protein}غ</strong></span>
+                                <span>كربوهيدرات <strong class="text-slate-200">${item.carbs}غ</strong></span>
+                                <span>دهون <strong class="text-slate-200">${item.fats}غ</strong></span>
+                            </div>
+
+                            <!-- Efficiency meter -->
+                            <div class="mt-4 p-3 rounded-2xl bg-slate-900/70 border border-slate-800">
+                                <div class="flex justify-between items-center text-[11px] mb-1.5">
+                                    <span class="text-slate-400">مؤشر الكفاءة</span>
+                                    <span class="font-extrabold text-white">${ratio.toFixed(3)} <span class="text-slate-500 font-normal">غ/سعرة</span></span>
+                                </div>
+                                <div class="meter"><span style="width:${meterPct}%"></span></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card Footer Info -->
-                    <div class="px-5 pb-5 pt-0 flex items-center justify-between border-t border-slate-800/60 mt-2">
-                        <div class="text-[11px] text-slate-400">
-                            مؤشر الكفاءة: <span class="font-extrabold text-white">${ratio}</span> غ/سعرة
-                        </div>
-                        <button onclick="openShareModal(${item.id})" class="text-xs text-amber-400 font-bold hover:text-amber-300 flex items-center gap-1 bg-amber-500/10 px-2.5 py-1.5 rounded-lg border border-amber-500/20 transition-all">
+                    <!-- Card Footer Actions -->
+                    <div class="px-5 pb-5 flex items-center gap-2">
+                        <button onclick="openVerifiedModal(${item.id})" class="badge-verified flex-1 py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 text-xs text-brand-300 font-bold hover:border-brand-400 transition-all">
+                            <i class="fa-solid fa-square-check text-brand-400 text-sm"></i>
+                            <span>مصدر التحليل</span>
+                        </button>
+                        <button onclick="openShareModal(${item.id})" aria-label="مشاركة ${item.name}" class="text-xs text-amber-400 font-bold hover:text-amber-300 flex items-center gap-1 bg-amber-500/10 px-3 py-2 rounded-xl border border-amber-500/20 transition-all">
                             <i class="fa-brands fa-instagram"></i>
                             <span>مشاركة</span>
                         </button>
                     </div>
-                </div>
+                </article>
                 `;
             }).join('');
         }
@@ -895,41 +1049,50 @@
         function renderTop10Ranking() {
             const container = document.getElementById('top10Grid');
             // Sort by Protein / Calories ratio
-            const sorted = [...restaurantMeals].sort((a, b) => (b.protein / b.calories) - (a.protein / a.calories)).slice(0, 10);
+            const sorted = [...restaurantMeals].sort((a, b) => efficiency(b) - efficiency(a)).slice(0, 10);
+            const best = efficiency(sorted[0]);
 
             container.innerHTML = sorted.map((item, index) => {
-                const ratio = (item.protein / item.calories).toFixed(3);
+                const ratio = efficiency(item);
                 const rankColor = index === 0 ? 'text-amber-400 border-amber-500/40 bg-amber-500/10' :
                                  index === 1 ? 'text-slate-300 border-slate-400/40 bg-slate-400/10' :
                                  index === 2 ? 'text-amber-600 border-amber-700/40 bg-amber-700/10' :
                                  'text-slate-400 border-slate-800 bg-slate-900';
+                const rankIcon = index < 3 ? '<i class="fa-solid fa-medal text-xs"></i>' : '';
 
                 return `
-                <div class="glass-card p-4 sm:p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-slate-800 hover:border-amber-500/30">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 shrink-0 rounded-xl border flex items-center justify-center font-black text-lg ${rankColor}">
-                            #${index + 1}
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <h3 class="text-sm sm:text-base font-extrabold text-white">${item.name}</h3>
-                                <span class="text-[10px] px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700">${item.restaurant}</span>
+                <div class="glass-card p-4 sm:p-5 rounded-2xl border border-slate-800 hover:border-amber-500/30 ${index === 0 ? 'ring-1 ring-amber-500/30' : ''}">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 min-w-0">
+                            <div class="w-12 h-12 shrink-0 rounded-xl border flex flex-col items-center justify-center font-black text-lg leading-none ${rankColor}">
+                                ${rankIcon}<span>${index + 1}</span>
                             </div>
-                            <p class="text-xs text-slate-400 mt-0.5">
-                                ${item.calories} سعرة حرارية &bull; ${item.protein}g بروتين &bull; ${item.carbs}g كربوهيدرات
-                            </p>
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h3 class="text-sm sm:text-base font-extrabold text-white">${item.name}</h3>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700">${item.restaurant}</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mt-1">
+                                    <span class="text-amber-400 font-bold">${item.calories}</span> سعرة &bull;
+                                    <span class="text-brand-400 font-bold">${item.protein}غ</span> بروتين &bull;
+                                    <span class="text-accent-400 font-bold">${item.carbs}غ</span> كربوهيدرات
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4 border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-800">
+                            <div class="text-right">
+                                <span class="block text-[10px] text-slate-400">مؤشر الكفاءة</span>
+                                <span class="text-base font-black text-amber-400">${ratio.toFixed(3)} <span class="text-[10px] text-slate-400 font-normal">غ/سعرة</span></span>
+                            </div>
+                            <button onclick="openShareModal(${item.id})" class="px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 text-xs font-bold transition-all flex items-center gap-1.5">
+                                <i class="fa-brands fa-instagram"></i>
+                                <span>مشاركة البطاقة</span>
+                            </button>
                         </div>
                     </div>
-
-                    <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4 border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-800">
-                        <div class="text-right">
-                            <span class="block text-[10px] text-slate-400">مؤشر الكفاءة</span>
-                            <span class="text-sm font-black text-amber-400">${ratio} <span class="text-[10px] text-slate-400 font-normal">غ بروتين/سعرة</span></span>
-                        </div>
-                        <button onclick="openShareModal(${item.id})" class="px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 text-xs font-bold transition-all flex items-center gap-1.5">
-                            <i class="fa-brands fa-instagram"></i>
-                            <span>مشاركة البطاقة</span>
-                        </button>
+                    <div class="meter mt-4" role="img" aria-label="${Math.round(ratio / best * 100)}٪ من كفاءة المركز الأول">
+                        <span style="width:${Math.round(ratio / best * 100)}%; background: linear-gradient(270deg, #f59e0b, #fb923c);"></span>
                     </div>
                 </div>
                 `;
@@ -948,7 +1111,9 @@
                 item.category.toLowerCase().includes(searchVal)
             );
 
-            container.innerHTML = filtered.map(item => `
+            document.getElementById('nutriNoResults').classList.toggle('hidden', filtered.length > 0);
+
+            container.innerHTML = filtered.map((item, idx) => `
                 <div class="glass-card p-5 rounded-2xl border border-cyan-500/20 flex flex-col justify-between">
                     <div>
                         <div class="flex items-start justify-between gap-2 mb-2">
@@ -978,22 +1143,20 @@
                             </div>
                         </div>
 
+                        <div class="mb-3">${macroBarHTML(item)}</div>
+
                         <!-- Micro Elements -->
-                        <div class="space-y-1 text-[11px] text-slate-400 bg-slate-900/40 p-2.5 rounded-xl border border-slate-800/80 mb-4">
-                            <div class="flex justify-between">
-                                <span>الألياف: <strong class="text-slate-200">${item.fiber}g</strong></span>
-                                <span>البوتاسيوم: <strong class="text-slate-200">${item.potassium}</strong></span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>الصوديوم: <strong class="text-slate-200">${item.sodium}</strong></span>
-                                <span>الزنك: <strong class="text-slate-200">${item.zinc}</strong></span>
-                            </div>
-                        </div>
+                        <dl class="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] text-slate-400 bg-slate-900/40 p-2.5 rounded-xl border border-slate-800/80 mb-4">
+                            <div class="flex justify-between"><dt>الألياف</dt><dd class="font-bold text-slate-200">${item.fiber}g</dd></div>
+                            <div class="flex justify-between"><dt>البوتاسيوم</dt><dd class="font-bold text-slate-200">${item.potassium}</dd></div>
+                            <div class="flex justify-between"><dt>الصوديوم</dt><dd class="font-bold text-slate-200">${item.sodium}</dd></div>
+                            <div class="flex justify-between"><dt>الزنك</dt><dd class="font-bold text-slate-200">${item.zinc}</dd></div>
+                        </dl>
                     </div>
 
-                    <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between">
-                        <span class="text-[10px] text-slate-500 truncate max-w-[170px]" title="${item.source}">${item.source}</span>
-                        <button onclick="copyMacroBreakdown('${item.name}', ${item.calories}, ${item.protein}, ${item.carbs}, ${item.fats})" class="text-xs text-cyan-400 hover:text-cyan-300 font-bold bg-cyan-500/10 px-2.5 py-1 rounded-lg border border-cyan-500/20 transition-all flex items-center gap-1">
+                    <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                        <span class="text-[10px] text-slate-500 truncate" title="${item.source}">${item.source}</span>
+                        <button onclick="copyMacroBreakdown(${rawIngredients.indexOf(item)})" class="shrink-0 text-xs text-cyan-400 hover:text-cyan-300 font-bold bg-cyan-500/10 px-2.5 py-1 rounded-lg border border-cyan-500/20 transition-all flex items-center gap-1">
                             <i class="fa-regular fa-copy"></i>
                             <span>نسخ للجدول</span>
                         </button>
@@ -1005,22 +1168,46 @@
         /* -------------------------------------------------------------
            7. MODALS & POPUP ACTIONS
         ------------------------------------------------------------- */
+        let lastFocused = null;
+
+        function showModal(id) {
+            lastFocused = document.activeElement;
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            modal.querySelector('button').focus();
+        }
+
+        function hideModal(id) {
+            const modal = document.getElementById(id);
+            if (modal.classList.contains('hidden')) return;
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            if (lastFocused) lastFocused.focus();
+        }
+
         function openVerifiedModal(itemId) {
             const item = restaurantMeals.find(m => m.id === itemId);
             if(!item) return;
 
+            const m = macroSplit(item);
             document.getElementById('modalDishName').textContent = item.name;
-            document.getElementById('modalConfidence').innerHTML = `<i class="fa-solid fa-shield-check"></i> ${item.confidence} (عالي جداً)`;
+            document.getElementById('modalConfidence').innerHTML = `<i class="fa-solid fa-shield-halved"></i> ${item.confidence} (${confidenceLabel(item.confidence)})`;
             document.getElementById('modalMethod').textContent = item.method;
             document.getElementById('modalSources').textContent = item.sources;
             document.getElementById('modalLastVerified').textContent = item.lastVerified;
+            document.getElementById('modalCalories').textContent = `${item.calories} kcal`;
+            document.getElementById('modalMacroBar').outerHTML = macroBarHTML(item).replace('class="macro-bar"', 'id="modalMacroBar" class="macro-bar"');
+            document.getElementById('modalMacroLegend').innerHTML = `
+                <div><span class="block font-black text-brand-400">${m.protein}٪</span><span class="text-slate-400">بروتين ${item.protein}غ</span></div>
+                <div><span class="block font-black text-accent-400">${m.carbs}٪</span><span class="text-slate-400">كربوهيدرات ${item.carbs}غ</span></div>
+                <div><span class="block font-black text-rose-400">${m.fats}٪</span><span class="text-slate-400">دهون ${item.fats}غ</span></div>`;
 
-            const modal = document.getElementById('verifiedModal');
-            modal.classList.remove('hidden');
+            showModal('verifiedModal');
         }
 
         function closeVerifiedModal() {
-            document.getElementById('verifiedModal').classList.add('hidden');
+            hideModal('verifiedModal');
         }
 
         function openShareModal(itemId) {
@@ -1028,19 +1215,18 @@
             if(!item) return;
 
             activeModalItem = item;
-            const ratio = (item.protein / item.calories).toFixed(3);
 
             document.getElementById('shareDishTitle').textContent = item.name;
             document.getElementById('shareRestName').textContent = `مطعم ${item.restaurant}`;
             document.getElementById('shareCalories').textContent = `${item.calories} kcal`;
             document.getElementById('shareProtein').textContent = `${item.protein}g`;
-            document.getElementById('shareRatio').textContent = ratio;
+            document.getElementById('shareRatio').textContent = efficiency(item).toFixed(3);
 
-            document.getElementById('shareModal').classList.remove('hidden');
+            showModal('shareModal');
         }
 
         function closeShareModal() {
-            document.getElementById('shareModal').classList.add('hidden');
+            hideModal('shareModal');
         }
 
         /* -------------------------------------------------------------
@@ -1051,7 +1237,7 @@
             const text = `🔥 وجبة رياضية موثّقة قرب ناديك:
 📌 الوجبة: ${activeModalItem.name} (${activeModalItem.restaurant})
 📊 السعرات: ${activeModalItem.calories} kcal | البروتين: ${activeModalItem.protein}g
-⚡ مؤشر الكفاءة: ${(activeModalItem.protein / activeModalItem.calories).toFixed(3)} جرام بروتين لكل سعرة!
+⚡ مؤشر الكفاءة: ${efficiency(activeModalItem).toFixed(3)} جرام بروتين لكل سعرة!
 ✓ تم التحقق علمياً من القيم عبر المنصة.`;
 
             copyToClipboard(text, "تم نسخ بطاقة مشاركة الانستغرام!");
@@ -1059,10 +1245,10 @@
         }
 
         function copyTop10InstagramSummary() {
-            const sorted = [...restaurantMeals].sort((a, b) => (b.protein / b.calories) - (a.protein / a.calories)).slice(0, 5);
+            const sorted = [...restaurantMeals].sort((a, b) => efficiency(b) - efficiency(a)).slice(0, 5);
             let text = `🏆 أفضل 5 وجبات صحية أعلى بروتيناً لكل سعرة قرب النادي:\n\n`;
             sorted.forEach((item, index) => {
-                const ratio = (item.protein / item.calories).toFixed(3);
+                const ratio = efficiency(item).toFixed(3);
                 text += `${index + 1}. ${item.name} (${item.restaurant}) -> ${item.protein}g بروتين | ${item.calories} سعرة (كفاءة: ${ratio})\n`;
             });
             text += `\n✓ جميع البيانات موثقة ومحسوبة بدقة عبر منصة التوثيق العلمي.`;
@@ -1070,14 +1256,26 @@
             copyToClipboard(text, "تم نسخ قائمة Top 5 للستوري والانستغرام!");
         }
 
-        function copyMacroBreakdown(name, cal, p, c, f) {
-            const text = `${name} (لكل 100g): ${cal} سعرة | بروتين: ${p}g | كربوهيدرات: ${c}g | دهون: ${f}g [المصدر: USDA/SFDA]`;
-            copyToClipboard(text, `تم نسخ قيم ${name} للحافظة!`);
+        function copyMacroBreakdown(index) {
+            const item = rawIngredients[index];
+            const text = `${item.name} (لكل 100g): ${item.calories} سعرة | بروتين: ${item.protein}g | كربوهيدرات: ${item.carbs}g | دهون: ${item.fats}g [المصدر: ${item.source}]`;
+            copyToClipboard(text, `تم نسخ قيم ${item.name} للحافظة!`);
         }
 
         function copyToClipboard(str, successMsg) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(str).then(() => showToast(successMsg), () => legacyCopy(str, successMsg));
+            } else {
+                legacyCopy(str, successMsg);
+            }
+        }
+
+        function legacyCopy(str, successMsg) {
             const el = document.createElement('textarea');
             el.value = str;
+            el.setAttribute('readonly', '');
+            el.style.position = 'fixed';
+            el.style.opacity = '0';
             document.body.appendChild(el);
             el.select();
             document.execCommand('copy');
@@ -1086,11 +1284,13 @@
             showToast(successMsg);
         }
 
+        let toastTimer = null;
         function showToast(message) {
             const toast = document.getElementById('toast');
             document.getElementById('toastMsg').textContent = message;
             toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-            setTimeout(() => {
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
                 toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
             }, 3000);
         }
